@@ -1,2 +1,5 @@
 /plan.txt
 /main
+*.gch
+*.o
+/.vscode
