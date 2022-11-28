@@ -1,23 +1,28 @@
 CC = g++
 FLAGS = --std=c++2a
-DIR = src
+SRCDIR = src
+SFMLDIR = /usr/local/Cellar/sfml/2.5.1_2
+
 
 all: main clean
 
-main: main.o Equation.o
-	$(CC) $(FLAGS) -o main main.o Equation.o App.o -L"/usr/local/Cellar/sfml/2.5.1_2/lib" -lsfml-graphics -lsfml-window -lsfml-system
+main: main.o Equation.o Pool.o Algorithm.o
+	$(CC) $(FLAGS) -o main main.o Equation.o Pool.o Algorithm.o -L"$(SFMLDIR)/lib" -lsfml-graphics -lsfml-window -lsfml-system
 
-main.o: main.cpp Equation.h
-	$(CC) $(FLAGS) -c $(DIR)/main.cpp
+main.o: $(SRCDIR)/main.cpp $(SRCDIR)/Pool.h $(SRCDIR)/Equation.h
+	$(CC) $(FLAGS) -c $(SRCDIR)/main.cpp
 
-App.o: $(DIR)/App.h SFML/Window.hpp
-	$(CC) $(FLAGS) -c $(DIR)/App.cpp
-# -I"/usr/local/Cellar/sfml/2.5.1_2/include"
+Pool.o: $(SRCDIR)/Pool.h
+	$(CC) $(FLAGS) -c $(SRCDIR)/Pool.cpp
 
-Equation.o: $(DIR)/Equation.h
-	$(CC) $(FLAGS) -c $(DIR)/Equation.cpp
+Equation.o: $(SRCDIR)/Equation.h
+	$(CC) $(FLAGS) -c $(SRCDIR)/Equation.cpp
+
+Algorithm.o: $(SRCDIR)/Algorithm.h
+	$(CC) $(FLAGS) -c $(SRCDIR)/Algorithm.cpp
 
 clean:
-	rm *.o $(DIR)/*.gch
+	rm *.o
+# $(SRCDIR)/*.gch
 
 # g++ --std=c++2a src/main.cpp -I"/usr/local/Cellar/sfml/2.5.1_2/include" -o main -L"/usr/local/Cellar/sfml/2.5.1_2/lib" -lsfml-graphics -lsfml-window -lsfml-system

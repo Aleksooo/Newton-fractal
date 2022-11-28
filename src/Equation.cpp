@@ -48,6 +48,9 @@ ROOT_TYPE Equation::operator()(ROOT_TYPE x) {
     return res;
 }
 
+ROOT_TYPE& Equation::operator[](size_t i) { return roots[i]; }
+
+size_t Equation::size() { return roots.size(); }
 
 ROOT_TYPE Equation::dfdx(ROOT_TYPE x) {
     ROOT_TYPE res;

@@ -1,9 +1,10 @@
+#include "handler.h"
 #include <iostream>
 #include <complex>
 #include <vector>
 
-typedef double NUMBER_TYPE;
-typedef std::complex<NUMBER_TYPE> ROOT_TYPE;
+#ifndef EQUATION_H
+#define EQUATION_H
 
 class Equation final {
 public:
@@ -17,8 +18,13 @@ public:
     // ~Equation();
 
     void add_root(ROOT_TYPE root);
+    ROOT_TYPE& operator[](size_t i);
+    size_t size();
+
     ROOT_TYPE operator()(ROOT_TYPE x);
     ROOT_TYPE dfdx(ROOT_TYPE x);
 private:
     std::vector<ROOT_TYPE> roots;
 };
+
+#endif
