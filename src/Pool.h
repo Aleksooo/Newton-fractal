@@ -7,7 +7,7 @@
 #ifndef POOL_H
 #define POOL_H
 
-class Pool : public sf::Drawable{
+class Pool : public sf::Drawable, public sf::Transformable{
 public:
     // RAII
     Pool(const Pool& lhs);
@@ -23,19 +23,21 @@ public:
     Pool(sf::VideoMode mode_, ComplexPlane plane_, size_t DEEP_);
 
     void render(Equation eq_);
+    void scale(NUMBER_TYPE sx, NUMBER_TYPE sy);
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    size_t WIDTH, HEIGHT;
+    int WIDTH, HEIGHT;
     NUMBER_TYPE x_left, x_right, y_up, y_down;
-    NUMBER_TYPE dx, dy;
+    NUMBER_TYPE sx, sy;
     size_t DEEP;
 
     std::vector<sf::CircleShape> points;
     size_t r = 10;
 
     sf::VertexArray pixels;
+    std::vector<sf::Color> data;
 };
 
 #endif
