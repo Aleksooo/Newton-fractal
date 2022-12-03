@@ -20,6 +20,7 @@ Pool::Pool(sf::VideoMode mode_, ComplexPlane plane_, size_t DEEP_) :
     y_up(plane_.y_up),
     y_down(plane_.y_down),
     sx(1), sy(1),
+    xc(0), yc(0),
     DEEP(DEEP_) {
         pixels.setPrimitiveType(sf::Points);
         pixels.resize(WIDTH * HEIGHT);
@@ -34,13 +35,18 @@ Pool::Pool(sf::VideoMode mode_, ComplexPlane plane_, size_t DEEP_) :
     }
 
 void Pool::render(Equation eq_) {
-    NUMBER_TYPE dx = (x_right - x_left) * sx / (WIDTH - 1);
-    NUMBER_TYPE dy = (y_up - y_down) * sy / (HEIGHT - 1);
+    // std::cout << "x_left : " << x_left << "\n";
+    // std::cout << "x_right : " << x_right << "\n";
+    // std::cout << "y_down : " << y_down << "\n";
+    // std::cout << "y_up : " << y_up << "\n";
+
+    NUMBER_TYPE dx = (x_right - x_left) / (WIDTH - 1);
+    NUMBER_TYPE dy = (y_up - y_down) / (HEIGHT - 1);
     // 'Y' coord
     for (size_t i = 0; i < HEIGHT; i++) {
         // 'X' coord
         for (size_t j = 0; j < WIDTH; j++) {
-            ROOT_TYPE xi(j * dx + x_left, i * dy + y_down);
+            ROOT_TYPE xi(x_left + (xc + j / sx)* dx, y_down + (yc + i / sy) * dy);
             int id = dist(eq_, newton_algorithm(eq_, xi, DEEP));
 
             if (id == 0) {
@@ -61,34 +67,71 @@ void Pool::render(Equation eq_) {
         pixels[i].color = data[i];
     }
 
+    points.clear();
     for (size_t i = 0; i < eq_.size(); i++) {
         sf::CircleShape circ(r);
-        circ.setPosition(sf::Vector2f((eq_[i].real() - x_left) / dx - r, (eq_[i].imag() - y_down) / dy - r));
+        circ.setPosition(sf::Vector2f((eq_[i].real() * sx - x_left) / dx - r, (eq_[i].imag() * sy - y_down) / dy - r));
         circ.setFillColor(sf::Color::Black);
         points.push_back(circ);
     }
+
+    x_left += sx * xc * dx;
+    x_right += (sx * xc - WIDTH * (sx - 1)) * dx;
+    y_down += sy * yc * dy;
+    y_up += (sy * yc - HEIGHT * (sy - 1)) * dy;
+
+    sx = 1;
+    sy = 1;
+
+    xc = 0;
+    yc = 0;
 }
 
-void Pool::scale(NUMBER_TYPE sx_, NUMBER_TYPE sy_) {
-    // Rescale all paramets of pool
-    sx = sx_;
-    sy = sy_;
+void Pool::zoom(NUMBER_TYPE dsxy_) {
+    xc += WIDTH * dsxy_ / sx / (sx + dsxy_) / 2;
+    yc += HEIGHT * dsxy_ / sy / (sy + dsxy_) / 2;
 
-    // 'Y' coord
-    for (int i = 0; i < HEIGHT; i++) {
-        // 'X' coord
-        for (int j = 0; j < WIDTH; j++) {
-            int x = static_cast<int>(j + ((sx - 1) * (WIDTH / 2 - j)) / sx);
-            int y = static_cast<int>(i + ((sy - 1) * (HEIGHT / 2- i)) / sy);
+    sx += dsxy_;
+    sy += dsxy_;
 
-            if (x >= WIDTH || x < 0 || y >= HEIGHT || y < 0) {
-                // std::cout << "(" << j << ", " << i << ") - > (" << x << ", " << y << ")\n";
-                pixels[WIDTH * i + j].color = sf::Color::Black;
-            } else {
-                pixels[WIDTH * i + j].color = data[WIDTH * y + x];
+    std::cout << "corner : (" << xc << ", " << yc << ")\n";
+    std::cout << "scale : (" << sx << ", " << sy << ")\n";
+    changed = true;
+}
+
+void Pool::update() {
+    // if (changed) {
+        // 'Y' coord
+        for (int i = 0; i < HEIGHT; i++) {
+            // 'X' coord
+            for (int j = 0; j < WIDTH; j++) {
+                int x = static_cast<int>(std::round(xc + j / sx));
+                int y = static_cast<int>(std::round(yc + i / sy));
+
+                if (x >= WIDTH || x < 0 || y >= HEIGHT || y < 0) {
+                    // std::cout << "(" << j << ", " << i << ") - > (" << x << ", " << y << ")\n";
+                    pixels[WIDTH * i + j].color = sf::Color::Black;
+                } else {
+                    pixels[WIDTH * i + j].color = data[WIDTH * y + x];
+                }
             }
         }
-    }
+
+        // changed = false;
+    // }
+}
+
+void Pool::set_mouse_pos(NUMBER_TYPE xm_, NUMBER_TYPE ym_) {
+    // dx = xm_;
+    // dy = ym_;
+}
+
+void Pool::move(NUMBER_TYPE dx_, NUMBER_TYPE dy_) {
+    yc -= dx_;
+    xc -= dy_;
+    std::cout << "corner : (" << xc << ", " << yc << ")\n";
+
+    changed = true;
 }
 
 void Pool::draw(sf::RenderTarget& target, sf::RenderStates states) const {

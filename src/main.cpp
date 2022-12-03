@@ -12,9 +12,16 @@
 using json = nlohmann::json;
 
 int main() {
-    std::string path("config.json");
-    std::ifstream f(path);
-    json config = json::parse(f);
+    std::string path_config("config.json");
+    std::ifstream fc(path_config);
+    json config = json::parse(fc);
+
+    std::string path_settings("settings.json");
+    std::ifstream fs(path_settings);
+    json settings = json::parse(fs);
+
+    NUMBER_TYPE button_zoom_speed = settings["button_zoom_speed"];
+    NUMBER_TYPE button_move_speed = settings["button_move_speed"];
 
     size_t WIDTH = config["WIDTH"];
     size_t HEIGHT = config["HEIGHT"];
@@ -30,9 +37,6 @@ int main() {
     Pool pool(sf::VideoMode(WIDTH, HEIGHT), ComplexPlane(config["x_left"], config["x_right"], config["y_up"], config["y_down"]), DEEP);
     pool.render(eq);
 
-    NUMBER_TYPE sx = 1;
-    NUMBER_TYPE sy = 1;
-
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))
@@ -43,20 +47,66 @@ int main() {
 
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Up) {
-                    sx += 0.2;
-                    sy += 0.2;
-                    pool.scale(sx, sy);
+                    pool.zoom(button_zoom_speed);
+                    // pool.update();
                 }
                 if (event.key.code == sf::Keyboard::Down) {
-                    sx -= 0.2;
-                    sy -= 0.2;
-                    pool.scale(sx, sy);
+                    pool.zoom(-button_zoom_speed);
+                    // pool.update();
+                }
+
+                if (event.key.code == sf::Keyboard::Space) {
+                    pool.render(eq);
+                    // pool.update();
+                }
+                // --------------------------------------------------
+                if (event.key.code == sf::Keyboard::W) {
+                    pool.move(0, -button_move_speed);
+                }
+
+                if (event.key.code == sf::Keyboard::S) {
+                    pool.move(0, button_move_speed);
+                }
+
+                if (event.key.code == sf::Keyboard::A) {
+                    pool.move(-button_move_speed, 0);
+                }
+
+                if (event.key.code == sf::Keyboard::D) {
+                    pool.move(button_move_speed, 0);
                 }
             }
+
+            // if (event.type == sf::Event::MouseButtonPressed) {
+            //     if (event.mouseButton.button == sf::Mouse::Left) {
+            //         std::cout << "the left button was pressed" << std::endl;
+            //         pool.set_mouse_pos(event.mouseMove.x, event.mouseMove.y);
+            //         is_pressed = true;
+            //     }
+            // }
+
+            // if (event.type == sf::Event::MouseButtonReleased) {
+            //     if (event.mouseButton.button == sf::Mouse::Left) {
+            //         std::cout << "the left button was released" << std::endl;
+            //         is_pressed = false;
+            //     }
+            // }
+
+            // if (is_pressed && event.type == sf::Event::MouseMoved) {
+            //         std::cout << "( " << event.mouseMove.x << ", " << event.mouseMove.y << ")\n";
+            //         pool.move(event.mouseMove.x, event.mouseMove.y);
+            //     }
+
+            // if (event.type == sf::Event::MouseWheelMoved) {
+            //     std::cout << k * event.mouseWheelScroll.delta << "\n";
+            //     sx += k * event.mouseWheelScroll.delta;
+            //     sy += k * event.mouseWheelScroll.delta;
+            // }
         }
 
         window.clear();
 
+        pool.update();
         window.draw(pool);
 
         window.display();

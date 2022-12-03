@@ -6,6 +6,9 @@ SFMLDIR = /usr/local/Cellar/sfml/2.5.1_2
 
 all: main
 
+rp:
+	rm Pool.o
+
 main: main.o Equation.o Pool.o Algorithm.o
 	$(CC) $(FLAGS) -o main main.o Equation.o Pool.o Algorithm.o -L"$(SFMLDIR)/lib" -lsfml-graphics -lsfml-window -lsfml-system
 
