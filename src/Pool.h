@@ -2,6 +2,7 @@
 #include "Equation.h"
 #include "Complex_plane.h"
 #include "Algorithm.h"
+#include "Pallete.h"
 #include <SFML/Graphics.hpp>
 
 #ifndef POOL_H
@@ -25,7 +26,6 @@ public:
     void render(Equation eq_);
     void zoom(NUMBER_TYPE dsxy_);
     void update();
-    void set_mouse_pos(NUMBER_TYPE xm_, NUMBER_TYPE ym_);
     void move(NUMBER_TYPE dx_, NUMBER_TYPE dy_);
 
 private:
@@ -35,16 +35,14 @@ private:
     NUMBER_TYPE x_left, x_right, y_up, y_down;
     NUMBER_TYPE sx, sy;
     NUMBER_TYPE xc, yc;
-    // NUMBER_TYPE dx, dy;
     size_t DEEP;
-
-    bool changed = false;
 
     std::vector<sf::CircleShape> points;
     size_t r = 10;
 
     sf::VertexArray pixels;
     std::vector<sf::Color> data;
+    Pallete pallete;
 };
 
 #endif

@@ -1,28 +1,28 @@
 CC = g++
-FLAGS = --std=c++2a -fsanitize=address
+FLAGS = --std=c++2a -Wall -fsanitize=address
 SRCDIR = src
 SFMLDIR = /usr/local/Cellar/sfml/2.5.1_2
 
 
 all: main
 
-rp:
-	rm Pool.o
+main: main.o Equation.o Pool.o Algorithm.o Pallete.o
+	$(CC) $(FLAGS) -o main main.o Equation.o Pool.o Algorithm.o Pallete.o -L"$(SFMLDIR)/lib" -lsfml-graphics -lsfml-window -lsfml-system
 
-main: main.o Equation.o Pool.o Algorithm.o
-	$(CC) $(FLAGS) -o main main.o Equation.o Pool.o Algorithm.o -L"$(SFMLDIR)/lib" -lsfml-graphics -lsfml-window -lsfml-system
-
-main.o: $(SRCDIR)/main.cpp $(SRCDIR)/Pool.h $(SRCDIR)/Equation.h
+main.o: $(SRCDIR)/main.cpp $(SRCDIR)/Pool.cpp $(SRCDIR)/Equation.cpp
 	$(CC) $(FLAGS) -c $(SRCDIR)/main.cpp
 
-Pool.o: $(SRCDIR)/Pool.h
+Pool.o: $(SRCDIR)/Pool.cpp
 	$(CC) $(FLAGS) -c $(SRCDIR)/Pool.cpp
 
-Equation.o: $(SRCDIR)/Equation.h
+Equation.o: $(SRCDIR)/Equation.cpp
 	$(CC) $(FLAGS) -c $(SRCDIR)/Equation.cpp
 
-Algorithm.o: $(SRCDIR)/Algorithm.h
+Algorithm.o: $(SRCDIR)/Algorithm.cpp
 	$(CC) $(FLAGS) -c $(SRCDIR)/Algorithm.cpp
+
+Pallete.o: $(SRCDIR)/Pallete.cpp
+	$(CC) $(FLAGS) -c $(SRCDIR)/Pallete.cpp
 
 clean:
 	rm *.o
