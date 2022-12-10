@@ -34,14 +34,21 @@ Pool::Pool(sf::VideoMode mode_, ComplexPlane plane_, size_t DEEP_) :
         }
     }
 
-void Pool::render(Equation eq_) {
+void Pool::render(Equation& eq_) {
     NUMBER_TYPE dx = (x_right - x_left) / (WIDTH - 1);
     NUMBER_TYPE dy = (y_up - y_down) / (HEIGHT - 1);
+
     std::vector<NUMBER_TYPE> id_dists;
     for (size_t i = 0; i < eq_.size(); i++) {
         id_dists.push_back(0);
     }
 
+    using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::milliseconds;
+
+    auto t1 = high_resolution_clock::now();
     // 'Y' coord
     for (size_t i = 0; i < HEIGHT; i++) {
         // 'X' coord
@@ -57,6 +64,7 @@ void Pool::render(Equation eq_) {
         pixels[i].color = data[i];
     }
 
+
     points.clear();
     for (size_t i = 0; i < eq_.size(); i++) {
         sf::CircleShape circ(r);
@@ -69,6 +77,10 @@ void Pool::render(Equation eq_) {
     x_right = x_left + (WIDTH - 1) * dx / sx;
     y_down += yc * dy;
     y_up = y_down + (HEIGHT - 1) * dy / sy;
+
+    auto t2 = high_resolution_clock::now();
+    auto ms = duration_cast<milliseconds>(t2 - t1);
+    std::cout << "Render time: " << ms.count() / 1000 << "\n";
 
     std::cout << "x_left : " << x_left << "\n";
     std::cout << "x_right : " << x_right << "\n";

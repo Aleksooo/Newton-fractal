@@ -76,32 +76,6 @@ int main() {
                     pool.move(button_move_speed, 0);
                 }
             }
-
-            // if (event.type == sf::Event::MouseButtonPressed) {
-            //     if (event.mouseButton.button == sf::Mouse::Left) {
-            //         std::cout << "the left button was pressed" << std::endl;
-            //         pool.set_mouse_pos(event.mouseMove.x, event.mouseMove.y);
-            //         is_pressed = true;
-            //     }
-            // }
-
-            // if (event.type == sf::Event::MouseButtonReleased) {
-            //     if (event.mouseButton.button == sf::Mouse::Left) {
-            //         std::cout << "the left button was released" << std::endl;
-            //         is_pressed = false;
-            //     }
-            // }
-
-            // if (is_pressed && event.type == sf::Event::MouseMoved) {
-            //         std::cout << "( " << event.mouseMove.x << ", " << event.mouseMove.y << ")\n";
-            //         pool.move(event.mouseMove.x, event.mouseMove.y);
-            //     }
-
-            // if (event.type == sf::Event::MouseWheelMoved) {
-            //     std::cout << k * event.mouseWheelScroll.delta << "\n";
-            //     sx += k * event.mouseWheelScroll.delta;
-            //     sy += k * event.mouseWheelScroll.delta;
-            // }
         }
 
         window.clear();

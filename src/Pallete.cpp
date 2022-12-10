@@ -11,7 +11,7 @@ Pallete::Pallete() {
 
 sf::Color Pallete::color(std::vector<NUMBER_TYPE>& id_dists) {
     size_t min_id = 0;
-    NUMBER_TYPE min_dist = id_dists[min_id];
+    NUMBER_TYPE min_dist = id_dists[0];
 
     for (size_t i = 1; i < id_dists.size(); i++) {
         if (id_dists[i] < min_dist) {
@@ -21,36 +21,12 @@ sf::Color Pallete::color(std::vector<NUMBER_TYPE>& id_dists) {
     }
 
     return colors[min_id];
-
-    // sf::Color colr(0, 0, 0);
-    // NUMBER_TYPE avg = 0;
-    // NUMBER_TYPE sum_ex = 0;
-
-    // for (size_t i = 1; i < id_dists.size(); i++) {
-    //     avg += id_dists[i];
-    // }
-    // avg /= id_dists.size();
-
-    // for (size_t i = 1; i < id_dists.size(); i++) {
-    //     NUMBER_TYPE k = exp(id_dists[i] - avg);
-    //     colr.r += colors[i].r * k;
-    //     colr.g += colors[i].g * k;
-    //     colr.b += colors[i].b * k;
-
-    //     sum_ex += k;
-    // }
-
-    // colr.r /= sum_ex;
-    // colr.g /= sum_ex;
-    // colr.b /= sum_ex;
-
-    // return colr;
 }
 
-size_t Pallete::size() {
+inline size_t Pallete::size() {
     return colors.size();
 }
 
-sf::Color& Pallete::operator[](size_t i) {
+inline sf::Color Pallete::operator[](size_t i) {
     return colors[i];
 }

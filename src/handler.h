@@ -2,6 +2,9 @@
 #include <complex>
 #include <vector>
 #include <cmath>
+#include <chrono>
+#include <iterator>
+#include <random>
 #include <SFML/Graphics.hpp>
 
 typedef double NUMBER_TYPE;

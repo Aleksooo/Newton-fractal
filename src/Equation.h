@@ -22,9 +22,22 @@ public:
     size_t size();
 
     ROOT_TYPE operator()(ROOT_TYPE x);
+    ROOT_TYPE Horner(ROOT_TYPE x);
     ROOT_TYPE dfdx(ROOT_TYPE x);
+    ROOT_TYPE Horner_dfdx(ROOT_TYPE x);
+    ROOT_TYPE fdf(ROOT_TYPE x);
+
+    void coeff_eval();
+    void coeff_eval(size_t deg);
+    void print_coeff();
+
+    void dirr_coeff_eval();
+    void print_dirr_coeff();
+
 private:
     std::vector<ROOT_TYPE> roots;
+    std::vector<ROOT_TYPE> coeff;
+    std::vector<ROOT_TYPE> dirr_coeff;
 };
 
 #endif

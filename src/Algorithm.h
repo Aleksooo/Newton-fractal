@@ -1,5 +1,6 @@
 #include "handler.h"
 #include <vector>
+#include <iterator>
 #include "Equation.h"
 
 #ifndef ALGORITHM_H

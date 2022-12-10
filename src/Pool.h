@@ -1,3 +1,4 @@
+#include <chrono>
 #include "handler.h"
 #include "Equation.h"
 #include "Complex_plane.h"
@@ -23,7 +24,7 @@ public:
     Pool();
     Pool(sf::VideoMode mode_, ComplexPlane plane_, size_t DEEP_);
 
-    void render(Equation eq_);
+    void render(Equation& eq_);
     void zoom(NUMBER_TYPE dsxy_);
     void update();
     void move(NUMBER_TYPE dx_, NUMBER_TYPE dy_);
