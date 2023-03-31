@@ -11,6 +11,7 @@
 #include "../libs/json.hpp"
 using json = nlohmann::json;
 
+
 int main() {
     std::string path_config("config.json");
     std::ifstream fc(path_config);
@@ -35,7 +36,8 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Pool");
     Pool pool(sf::VideoMode(WIDTH, HEIGHT), ComplexPlane(config["x_left"], config["x_right"], config["y_up"], config["y_down"]), DEEP);
-    pool.render(eq);
+    // pool.render(eq);
+    pool.parallel_render(eq);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -56,7 +58,8 @@ int main() {
                 }
 
                 if (event.key.code == sf::Keyboard::Space) {
-                    pool.render(eq);
+                    // pool.render(eq);
+                    pool.parallel_render(eq);
                     // pool.update();
                 }
                 // --------------------------------------------------

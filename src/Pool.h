@@ -1,4 +1,5 @@
 #include <chrono>
+#include <thread>
 #include "handler.h"
 #include "Equation.h"
 #include "Complex_plane.h"
@@ -25,12 +26,13 @@ public:
     Pool(sf::VideoMode mode_, ComplexPlane plane_, size_t DEEP_);
 
     void render(Equation& eq_);
+    void parallel_render(Equation& eq_);
     void zoom(NUMBER_TYPE dsxy_);
     void update();
     void move(NUMBER_TYPE dx_, NUMBER_TYPE dy_);
 
-private:
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void parallel_for(size_t begin, size_t end, Equation& eq_, NUMBER_TYPE dx, NUMBER_TYPE dy);
+    void test();
 
     int WIDTH, HEIGHT;
     NUMBER_TYPE x_left, x_right, y_up, y_down;
@@ -44,6 +46,9 @@ private:
     sf::VertexArray pixels;
     std::vector<sf::Color> data;
     Pallete pallete;
+
+private:
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 
 #endif

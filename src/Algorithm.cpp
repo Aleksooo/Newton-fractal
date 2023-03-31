@@ -22,9 +22,3 @@ ROOT_TYPE newton_algorithm(Equation& eq, ROOT_TYPE x0, size_t N) {
 
     return target;
 }
-
-void dist(Equation& eq, ROOT_TYPE x, std::vector<NUMBER_TYPE>& id_dists) {
-    for (size_t i = 0; i < eq.size(); i++) {
-        id_dists[i] = std::abs(eq[i] - x);
-    }
-}
